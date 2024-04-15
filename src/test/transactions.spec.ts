@@ -1,8 +1,7 @@
-import { beforeAll, afterAll, describe, it, expect, beforeEach } from "vitest";
+import { beforeAll, afterAll, describe, it, expect, beforeEach, afterEach } from "vitest";
 import request from "supertest";
 import { app } from "../app";
 import { execSync } from "node:child_process";
-import { afterEach } from "node:test";
 
 /**
  * execSync é um método utilizado para executar comandos de terminal no Node.js
