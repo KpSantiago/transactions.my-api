@@ -4,6 +4,13 @@ node_modules
 # databases
 src/database/*.db
 
+# Test
+# Tests are deprected
+src/tests
+
 # envirouments
 .env
 .env.test
+
+# REST Client
+tests.http

@@ -3,6 +3,7 @@ import { knex } from "../config/database";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { checkSessionIdExistence } from "../middlewares/check-session-id-existence";
+import { request } from "node:http";
 
 // plugins são basicamente a capacidade de separar pequenos pedaços da nossa aplicação em mais arquivos
 export async function transactionsRoutes(app: FastifyInstance) {
@@ -12,11 +13,10 @@ export async function transactionsRoutes(app: FastifyInstance) {
      * param1: tipo envento
      * param2: function
      * obs: só funcionará neste contextgo
-     *  */ 
+     *  */
     // app.addHook('preHandler', async (request, reply) => {
     //     console.log(`${request.method} ${request.url}`)
     // })
-
 
     app.get('/',
         {
@@ -25,7 +25,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
         async (request, reply) => {
             const { sessionId } = request.cookies;
 
-            const transactions = await knex('transactions').where('session_id', sessionId).select('*');
+            const transactions = await knex('transactions').where('session_id', sessionId).select('*').orderBy('created_at', 'desc');
 
             return { total: transactions.length, transactions }
 
@@ -69,10 +69,11 @@ export async function transactionsRoutes(app: FastifyInstance) {
         const bodySchema = z.object({
             title: z.string(),
             amount: z.number(),
-            type: z.enum(['debit', 'credit'])
+            type: z.enum(['debit', 'credit']),
+            category: z.enum(['food', 'travel', 'clothes', 'games', 'job', 'others'])
         });
 
-        const { title, amount, type } = bodySchema.parse(request.body);
+        const { title, amount, type, category } = bodySchema.parse(request.body);
 
 
         // Trabalhando com cookies
@@ -92,6 +93,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
             title,
             amount: type == 'credit' ? amount : amount * -1,
             type,
+            category,
             session_id: sessionId,
         });
 

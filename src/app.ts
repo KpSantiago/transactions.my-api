@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import { transactionsRoutes } from "./routes/transactions";
 import cookie from "@fastify/cookie";
+import cors from "@fastify/cors";
 
 const app = fastify();
 
@@ -10,11 +11,20 @@ const app = fastify();
  * podemos utlizar dentro do resgiter o parametro {prefix: 'nome_do_prefixo'}
 */
 
+
 // funcionará para todas as rotas da aplciação
 app.addHook('preHandler', async (request, reply) => {
     console.log(`${request.method} ${request.url}`)
 })
 
 app.register(cookie);
+app.register(cors, {
+    origin: true,
+    allowedHeaders: '* ',
+    credentials: true,
+    methods: '*',
+})
+
 app.register(transactionsRoutes, { prefix: 'transactions' });
+
 export { app }

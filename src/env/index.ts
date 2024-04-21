@@ -15,14 +15,14 @@ if (process.env.NODE_ENV == 'test') {
 const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default("development"),
     DATABASE_URL: z.string(),
-    PORT: z.number().default(3333)
+    PORT: z.coerce.number().default(3333)
 })
 
 const _env = envSchema.safeParse(process.env);
 
 if (_env.success == false) {
-    console.error("A invalid enviroment variables", _env.error.format);
-    throw new Error("A invalid enviroment variables")
+    console.log("A invalid enviroment variables", _env.error.format());
+    throw new Error()
 }
 
 export const env = _env.data;

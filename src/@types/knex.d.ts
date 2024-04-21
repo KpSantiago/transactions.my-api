@@ -9,7 +9,9 @@ declare module 'knex/types/tables' {
             session_id?: string;
             title: string;
             amount: number;
-            type: 'debit' | 'credit'
+            type: 'debit' | 'credit';
+            category: 'food' | 'travel' | 'clothes' | 'games' | 'job' | 'others';
+            created_at: Date
         };
     }
 }
