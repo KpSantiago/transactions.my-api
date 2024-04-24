@@ -6,7 +6,8 @@
   "scripts": {
     "test": "vitest",
     "build": "tsup src --out-dir build",
-    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/server.ts"
+    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/server.ts",
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",

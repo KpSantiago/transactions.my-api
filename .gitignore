@@ -16,4 +16,4 @@ src/tests
 tests.http
 
 # Build
-./build
+build
