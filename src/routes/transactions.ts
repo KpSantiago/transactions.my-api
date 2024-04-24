@@ -92,7 +92,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
             return reply.status(201).send({
                 sessionId: {
                     value: createSessionId,
-                    masAge: 60 * 60 * 24 * 7,
+                    maxAge: 60 * 60 * 24 * 7,
                     path: '/',
                 }
             });
