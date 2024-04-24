@@ -20,9 +20,7 @@ app.addHook('preHandler', async (request, reply) => {
 app.register(cookie);
 app.register(cors, {
     origin: true,
-    allowedHeaders: '* ',
     credentials: true,
-    methods: '*',
 })
 
 app.register(transactionsRoutes, { prefix: 'transactions' });

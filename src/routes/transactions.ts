@@ -3,7 +3,6 @@ import { knex } from "../config/database";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { checkSessionIdExistence } from "../middlewares/check-session-id-existence";
-import { request } from "node:http";
 
 // plugins são basicamente a capacidade de separar pequenos pedaços da nossa aplicação em mais arquivos
 export async function transactionsRoutes(app: FastifyInstance) {
@@ -98,5 +97,18 @@ export async function transactionsRoutes(app: FastifyInstance) {
         });
 
         return reply.status(201).send();
-    })
+    });
+
+    app.put('/end-session',
+        {
+            preHandler: [checkSessionIdExistence]
+        },
+        async (request, reply) => {
+            const { sessionId } = request.cookies;
+
+            await knex('transactions').where('session_id', sessionId).delete('*');
+
+            return reply.status(204).send()
+        }
+    )
 }
