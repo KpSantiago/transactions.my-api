@@ -77,28 +77,27 @@ export async function transactionsRoutes(app: FastifyInstance) {
         // Trabalhando com cookies
         let sessionId = request.cookies.sessionId;
 
-        let createSessionId = sessionId ? sessionId : randomUUID();
+        if (!sessionId) {
+            sessionId = randomUUID();
 
+            reply.setCookie('sessionId', sessionId, {
+                maxAge: 60 * 60 * 24 * 7,
+                path: '/',
+
+            })
+
+        }
         await knex('transactions').insert({
             id: randomUUID(),
             title,
             amount: type == 'credit' ? amount : amount * -1,
             type,
             category,
-            session_id: createSessionId,
+            session_id: sessionId,
         });
 
-        if (!sessionId) {
-            return reply.status(201).send({
-                sessionId: {
-                    value: createSessionId,
-                    maxAge: 60 * 60 * 24 * 7,
-                    path: '/',
-                }
-            });
-        } else {
-            return reply.status(201).send();
-        }
+        return reply.status(201).send();
+
     });
 
     app.put('/end-session',
