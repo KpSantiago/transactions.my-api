@@ -77,8 +77,6 @@ export async function transactionsRoutes(app: FastifyInstance) {
         // Trabalhando com cookies
         let { sessionid } = request.headers;
 
-        console.log(sessionid)
-
         let createSessionId = sessionid ? sessionid.toString() : randomUUID()
 
         await knex('transactions').insert({
@@ -100,6 +98,34 @@ export async function transactionsRoutes(app: FastifyInstance) {
         }
 
     });
+
+    app.patch('/',
+        {
+            preHandler: [checkSessionIdExistence]
+        },
+        async (request, reply) => {
+            const { sessionid } = request.headers;
+
+            const bodySchema = z.object({
+                id: z.string(),
+                title: z.string(),
+                amount: z.number(),
+                type: z.enum(['debit', 'credit']),
+                category: z.enum(['food', 'travel', 'clothes', 'games', 'job', 'others'])
+            });
+
+            const { id, title, amount, type, category } = bodySchema.parse(request.body);
+
+            await knex('transactions').where({ id, session_id: sessionid!.toString() }).update({
+                title,
+                amount: type == 'credit' ? amount : amount * -1,
+                type,
+                category,
+            });
+
+            return reply.status(204).send({})
+        }
+    )
 
     app.put('/end-session',
         {
