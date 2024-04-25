@@ -84,7 +84,8 @@ export async function transactionsRoutes(app: FastifyInstance) {
                 maxAge: 60 * 60 * 24 * 7, // 7 days
                 path: '/',
                 sameSite: 'strict',
-                domain: 'http://localhost:4200'
+                httpOnly: false,
+                domain: 'transactions-my'
             })
 
         }
