@@ -19,7 +19,7 @@ app.addHook('preHandler', async (request, reply) => {
 
 app.register(cookie);
 app.register(cors, {
-    origin: "https://transactions-my.netlify.app",
+    origin: ["https://transactions-my.netlify.app", "http://localhost:4200"],
     allowedHeaders: ['Content-Type', 'Cookie', 'Set-Cookie'],
     credentials: true,
 })
