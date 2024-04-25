@@ -83,7 +83,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
             reply.setCookie('sessionId', sessionId, {
                 maxAge: 60 * 60 * 24 * 7, // 7 days
                 path: '/',
-                sameSite: 'lax',
+                sameSite: 'none',
             })
 
         }
